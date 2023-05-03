@@ -3,4 +3,4 @@ regex
 allennlp
 git+https://github.com/mcps5601/fever-scorer@master#egg=fever-scorer
 fever-allennlp-reader
-git+git://github.com/j6mes/drqa@parallel
+git+https://github.com/j6mes/drqa@parallel
