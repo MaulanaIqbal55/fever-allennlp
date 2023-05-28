@@ -84,7 +84,7 @@ def count(ngram, hash_size, doc_id):
     return row, col, data
 
 
-def count_matrix(data, row, col):
+def count_matrix(args, db, db_opts, data, row, col):
 
     # Map doc_ids to indexes
     global DOC2IDX
@@ -135,6 +135,8 @@ def get_doc_freqs(cnts):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
+    parser.add_argument('db_path', type=str, default=None,
+                        help='Path to sqlite db holding document texts')
     parser.add_argument('matrix_path', type=str, default=None,
                         help='Path to sqlite db holding document texts')
     parser.add_argument('out_dir', type=str, default=None,
@@ -163,7 +165,7 @@ if __name__ == '__main__':
         data = json.load(f)
 
     logging.info('Counting words...')
-    count_matrix, doc_dict = get_count_matrix(data, row, col)
+    count_matrix, doc_dict = count_matrix(args, 'sqlite', {'db_path': args.db_path}, data, row, col)
 
     logger.info('Making tfidf vectors...')
     tfidf = get_tfidf_matrix(count_matrix)
@@ -184,4 +186,11 @@ if __name__ == '__main__':
         'ngram': args.ngram,
         'doc_dict': doc_dict
     }
+
+    save_dir = os.path.dirname(args.out_dir)
+    if not os.path.exists(save_dir):
+        logger.info("Save directory doesn't exist. Making {0}".format(save_dir))
+        os.makedirs(save_dir)
+
+    
     retriever.utils.save_sparse_csr(filename, tfidf, metadata)

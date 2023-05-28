@@ -144,7 +144,7 @@ if __name__ == '__main__':
     parser.add_argument('--tokenizer', type=str, default='simple',
                         help=("String option specifying tokenizer type to use "
                               "(e.g. 'corenlp')"))
-    parser.add_argument('--num-workers', type=int, default=None,
+    parser.add_argument('--num-workers', type=int, default=0,
                         help='Number of CPU processes (for tokenizing, etc)')
     args = parser.parse_args()
 
@@ -158,17 +158,17 @@ if __name__ == '__main__':
         logger.info("Save directory doesn't exist. Making {0}".format(save_dir))
         os.makedirs(save_dir)
 
-    with open(save.dir+'/row.json', 'w') as f:
+    with open(save_dir+'/row.json', 'w') as f:
         # indent=2 is not needed but makes the file human-readable 
         # if the data is nested
         json.dump(row, f, indent=2)
 
-    with open(save.dir+'/col.json', 'w') as f:
+    with open(save_dir+'/col.json', 'w') as f:
         # indent=2 is not needed but makes the file human-readable 
         # if the data is nested
         json.dump(col, f, indent=2)
 
-    with open(save.dir+'/data.json', 'w') as f:
+    with open(save_dir+'/data.json', 'w') as f:
         # indent=2 is not needed but makes the file human-readable 
         # if the data is nested
         json.dump(data, f, indent=2) 
